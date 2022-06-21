@@ -10,7 +10,7 @@ export default class createQRCode {
         this.image = `data:image/svg+xml;base64,${Buffer.from(url).toString(
           "base64"
         )}`;
-        console.log(this.image);
+        // console.log(this.image);
       }
     );
   }

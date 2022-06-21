@@ -36,12 +36,12 @@ export default class Canvas {
       if (file) {
         const { x = 0, y = 0, width = 0, height = 0 } = images[i];
         this.ctx.drawImage(file, x, y, width, height);
+        this.ctx.imageSmoothingEnabled = false;
       }
     });
   }
 
   download(i: number) {
-    console.log(i);
     const buffer = this.canvas.toBuffer("image/png");
     fs.writeFileSync(
       path.join(__dirname, `../../public/results/qrcode${i}.png`),
