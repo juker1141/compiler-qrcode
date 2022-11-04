@@ -39,7 +39,7 @@ class Canvas {
     }
     download(i) {
         const buffer = this.canvas.toBuffer("image/png");
-        fs_1.default.writeFileSync(path_1.default.join(__dirname, `../../public/results/qrcode${i}.png`), buffer);
+        fs_1.default.writeFileSync(path_1.default.join(__dirname, `../../public/results3/${i}.png`), buffer);
     }
 }
 exports.default = Canvas;

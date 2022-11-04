@@ -41,10 +41,10 @@ export default class Canvas {
     });
   }
 
-  download(i: number) {
+  download(i: number, targetDir: string) {
     const buffer = this.canvas.toBuffer("image/png");
     fs.writeFileSync(
-      path.join(__dirname, `../../public/results/qrcode${i}.png`),
+      path.join(__dirname, `../../public/${targetDir}/${i}.png`),
       buffer
     );
   }

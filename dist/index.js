@@ -17,12 +17,12 @@ const canvas_1 = __importDefault(require("./canvas"));
 const qrcode_1 = __importDefault(require("./qrcode"));
 function autoCreate(index) {
     return __awaiter(this, void 0, void 0, function* () {
-        const canvas = new canvas_1.default({
+        let canvas = new canvas_1.default({
             width: 2000,
             height: 3000,
         });
         try {
-            const res = yield canvas.run({
+            yield canvas.run({
                 src: path_1.default.join(__dirname, "../public/assets/bg-transparent.png"),
                 x: 0,
                 y: 0,
@@ -36,50 +36,69 @@ function autoCreate(index) {
                 width: 500,
                 height: 500,
             });
-            console.log("downloading", index);
             canvas.download(index);
         }
         catch (error) {
             console.log(error);
+        }
+        finally {
+            canvas = null;
         }
     });
 }
 function CreateAllMissions(rangeStart, rangeEnd) {
     const missions = [];
     for (let i = rangeStart; i < rangeEnd + 1; i++) {
-        const mission = { fn: autoCreate, index: i };
+        const mission = { fn: autoCreate2, index: i };
         missions.push(mission);
     }
     return missions;
 }
 const ImagesMissions = (start, end) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Promise.all(CreateAllMissions(start, end).map(({ fn, index }) => fn(index)));
+    yield Promise.all(CreateAllMissions(start, end).map(({ fn, index }) => fn(index)));
 });
-const autoComplate = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield ImagesMissions(1, 100);
+let CREATE_RANGE = 50;
+let MAX_VALUE = 10000;
+const createTimes = Math.ceil(MAX_VALUE / CREATE_RANGE); // 10
+const pollingArray = Array.from(Array(createTimes).keys()); // [0, 1, 2, 3 ...];
+const pollingSearch = (startWith) => __awaiter(void 0, void 0, void 0, function* () {
+    for (let i = 0; i < pollingArray.length; i++) {
+        const rangeStart = startWith + CREATE_RANGE * pollingArray[i];
+        const rangeEnd = startWith + CREATE_RANGE * (pollingArray[i] + 1) - 1;
+        console.log(rangeStart, rangeEnd);
+        yield ImagesMissions(rangeStart, rangeEnd);
+    }
 });
-autoComplate();
-// const resultCanvas = new Canvas({
-//   width: 2000,
-//   height: 3000,
-// });
-// resultCanvas
-//   .run(
-//     {
-//       src: path.join(__dirname, "../public/assets/nft-template.png"),
-//       x: 0,
-//       y: 0,
-//       width: 2000,
-//       height: 3000,
-//     },
-//     {
-//       src: path.join(__dirname, "../public/results/qrcode1.png"),
-//       x: 0,
-//       y: 0,
-//       width: 2000,
-//       height: 3000,
-//     }
-//   )
-//   .then(() => {
-//     resultCanvas.download(2);
-//   });
+// pollingSearch(200001);
+function autoCreate2(index) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let canvas = new canvas_1.default({
+            width: 2000,
+            height: 3000,
+        });
+        try {
+            yield canvas.run({
+                src: path_1.default.join(__dirname, `../public/bg2/${index}.png`),
+                x: 0,
+                y: 0,
+                width: 2000,
+                height: 3000,
+            }, {
+                // src: path.join(__dirname, "../public/assets/qrcode.svg"),
+                src: path_1.default.join(__dirname, `../public/qrcode/qrcode${index}.png`),
+                x: 0,
+                y: 0,
+                width: 2000,
+                height: 3000,
+            });
+            canvas.download(index);
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            canvas = null;
+        }
+    });
+}
+ImagesMissions(200001, 200020);
