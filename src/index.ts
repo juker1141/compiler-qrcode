@@ -27,7 +27,7 @@ async function autoCreate(index: number) {
         height: 500,
       }
     );
-    canvas.download(index, "qrcode/200001");
+    canvas.download(index, "qrcode");
   } catch (error) {
     console.log(error);
   } finally {
@@ -51,7 +51,7 @@ const ImagesMissions = async (start: number, end: number) => {
 };
 
 let CREATE_RANGE = 50; // 一輪的分批
-let MAX_VALUE = 10000; //最大值
+let MAX_VALUE = 100; //最大值
 const createTimes = Math.ceil(MAX_VALUE / CREATE_RANGE); // 10
 const pollingArray = Array.from(Array(createTimes).keys()); // [0, 1, 2, 3 ...];
 const pollingSearch = async (startWith: number) => {
